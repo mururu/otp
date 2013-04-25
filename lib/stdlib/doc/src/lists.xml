@@ -238,6 +238,13 @@ flatmap(Fun, List1) ->
       </desc>
     </func>
     <func>
+      <name name="init" arity="1"/>
+      <fsummary>Return all elements of a list except the last one</fsummary>
+      <desc>
+        <p>Returns all elements in <c><anno>List</anno></c> except the last one.</p>
+      </desc>
+    </func>
+    <func>
       <name name="keydelete" arity="3"/>
       <fsummary>Delete an element from a list of tuples</fsummary>
       <type_desc variable="N">1..tuple_size(<anno>Tuple</anno>)</type_desc>
