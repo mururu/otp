@@ -212,8 +212,10 @@ suffix(Suffix, List) ->
 
 %% This is the fastest (simple) way of doing init, since tl and
 %% reverse are BIFs.
-init(List) ->
-  reverse(tl(reverse(List))).
+init([]) -> error(badarg);
+init(List = [_ | _]) ->
+  lists:reverse(tl(lists:reverse(List)));
+init(_) -> error(badarg).
 
 %% last(List) returns the last element in a list.
 

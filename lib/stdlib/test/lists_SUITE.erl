@@ -2648,6 +2648,6 @@ init(Config) when is_list(Config) ->
     ?line [] = lists:init([x]),
     ?line [x] = lists:init([x, y]),
     ?line {'EXIT', {badarg, _}} = (catch lists:init([])),
-    ?line {'EXIT', _} = (catch lists:init(x)),
+    ?line {'EXIT', {badarg, _}} = (catch lists:init(x)),
 
     ok.
