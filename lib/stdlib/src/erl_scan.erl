@@ -580,7 +580,7 @@ scan1("=/="++Cs, St, Line, Col, Toks) ->
 scan1("=/"=Cs, _St, Line, Col, Toks) ->
     {more,{Cs,Col,Toks,Line,[],fun scan/6}};
 scan1("=<"++Cs, St, Line, Col, Toks) ->
-    tok2(Cs, St, Line, Col, Toks, "=<", '=<', 2);
+    scan_le(Cs, St, Line, Col, Toks, 1);
 scan1("=="++Cs, St, Line, Col, Toks) ->
     tok2(Cs, St, Line, Col, Toks, "==", '==', 2);
 scan1("="=Cs, _St, Line, Col, Toks) ->
@@ -651,6 +651,19 @@ scan1([]=Cs, _St, Line, Col, Toks) ->
     {more,{Cs,Col,Toks,Line,[],fun scan/6}};
 scan1(eof=Cs, _St, Line, Col, Toks) ->
     {ok,Toks,Cs,Line,Col}.
+
+scan_le([], _St, Line, Col, Toks, LtCount) ->
+    {more,{[],Col,Toks,Line,LtCount,fun scan_le/6}};
+scan_le("<"++Cs, St, Line, Col, Toks, LtCount) ->
+    scan_le(Cs, St, Line, Col, Toks, LtCount+1);
+scan_le(Cs, St, Line, Col, Toks, 1) ->
+    tok2(Cs, St, Line, Col, Toks, "=<", '=<', 2);
+scan_le(Cs, St, Line, Col, Toks, LtCount) when LtCount rem 2 =:= 1 ->
+    Lts = lists:duplicate(LtCount-1, $<),
+    tok2(Lts++Cs, St, Line, Col, Toks, "=<", '=<', 2);
+scan_le(Cs, St, Line, Col, Toks, LtCount) ->
+    Lts = lists:duplicate(LtCount, $<),
+    tok2(Lts++Cs, St, Line, Col, Toks, "=", '=', 1).
 
 scan_atom(Cs0, St, Line, Col, Toks, Ncs0) ->
     case scan_name(Cs0, Ncs0) of
