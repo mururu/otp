@@ -61,7 +61,8 @@
 	 zip_unzip/1, zip_unzip3/1, zipwith/1, zipwith3/1,
 	 filter_partition/1, 
 	 otp_5939/1, otp_6023/1, otp_6606/1, otp_7230/1,
-	 suffix/1, subtract/1]).
+	 suffix/1, subtract/1,
+	 init/1]).
 
 %% Sort randomized lists until stopped.
 %%
@@ -2642,3 +2643,11 @@ sub(A, B) ->
     Res = A -- B,
     Res = lists:subtract(A, B).
 	
+%% Test lists:init/1
+init(Config) when is_list(Config) ->
+    ?line [] = lists:init([x]),
+    ?line [x] = lists:init([x, y]),
+    ?line {'EXIT', {badarg, _}} = (catch lists:init([])),
+    ?line {'EXIT', {badarg, _}} = (catch lists:init(x)),
+
+    ok.

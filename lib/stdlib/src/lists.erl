@@ -22,7 +22,7 @@
 -compile({no_auto_import,[min/2]}).
 
 -export([append/2, append/1, subtract/2, reverse/1,
-	 nth/2, nthtail/2, prefix/2, suffix/2, last/1, 
+	 nth/2, nthtail/2, prefix/2, suffix/2, init/1, last/1,
 	 seq/2, seq/3, sum/1, duplicate/2, min/1, max/1, sublist/2, sublist/3,
 	 delete/2,
 	 unzip/1, unzip3/1, zip/2, zip3/3, zipwith/3, zipwith3/4,
@@ -202,6 +202,20 @@ prefix([_|_], List) when is_list(List) -> false.
 suffix(Suffix, List) ->
     Delta = length(List) - length(Suffix),
     Delta >= 0 andalso nthtail(Delta, List) =:= Suffix.
+
+%% init(List) returns the list dropping its last element
+
+-spec init(List) -> Init when
+      List :: [T, ...],
+      Init :: [T],
+      T :: term().
+
+%% This is the fastest (simple) way of doing init, since tl and
+%% reverse are BIFs.
+init([]) -> error(badarg);
+init(List = [_ | _]) ->
+  lists:reverse(tl(lists:reverse(List)));
+init(_) -> error(badarg).
 
 %% last(List) returns the last element in a list.
 
