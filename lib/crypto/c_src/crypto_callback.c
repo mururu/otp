@@ -55,30 +55,30 @@
 DLLEXPORT struct crypto_callbacks* get_crypto_callbacks(int nlocks);
 
 
-static void nomem(size_t size, const char* op)
+static void nomem(size_t size, const char* op, const char* file, int line)
 {
-    fprintf(stderr, "Out of memory abort. Crypto failed to %s %zu bytes.\r\n",
-	    op, size);
+    fprintf(stderr, "Out of memory abort. Crypto failed to %s %zu bytes at %s:%d.\r\n",
+	    op, size, file, line);
     abort();
 }
 
-static void* crypto_alloc(size_t size)
+static void* crypto_alloc(size_t size, const char* file, int line)
 {
     void *ret = enif_alloc(size);
 
     if (!ret && size)
-	nomem(size, "allocate");
+	nomem(size, "allocate", file, line);
     return ret;
 }
-static void* crypto_realloc(void* ptr, size_t size)
+static void* crypto_realloc(void* ptr, size_t size, const char* file, int line)
 {
     void* ret = enif_realloc(ptr, size);
 
     if (!ret && size)
-	nomem(size, "reallocate");
+	nomem(size, "reallocate", file, line);
     return ret;
 }
-static void crypto_free(void* ptr)
+static void crypto_free(void* ptr, const char* file, int line)
 {
     enif_free(ptr);
 }

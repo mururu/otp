@@ -22,9 +22,9 @@ struct crypto_callbacks
 {
     size_t sizeof_me;
 
-    void* (*crypto_alloc)(size_t size);
-    void* (*crypto_realloc)(void* ptr, size_t size);
-    void (*crypto_free)(void* ptr);
+    void* (*crypto_alloc)(size_t size, const char *file, int line);
+    void* (*crypto_realloc)(void* ptr, size_t size, const char *file, int line);
+    void (*crypto_free)(void* ptr, const char *file, int line);
 
     /* openssl callbacks */
   #ifdef OPENSSL_THREADS
